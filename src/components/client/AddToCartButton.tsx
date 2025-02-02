@@ -2,11 +2,11 @@
 
 import useStore from "@/store/useStore";
 import { Button } from "@/components/ui/button";
-import { useCartStore, CartStore } from "@/store/useCartStore";
+import { useCartStore, ICartStore } from "@/store/useCartStore";
 import type { IProduct } from "@/types/index";
 
-const AddToCartButton = (props: { product: IProduct }) => {
-  const cartStore = useStore<CartStore, CartStore>(
+export default function AddToCartButton(props: { product: IProduct }) {
+  const cartStore = useStore<ICartStore, ICartStore>(
     useCartStore,
     (state: any) => state
   );
@@ -44,5 +44,3 @@ const AddToCartButton = (props: { product: IProduct }) => {
     </Button>
   );
 };
-
-export default AddToCartButton;

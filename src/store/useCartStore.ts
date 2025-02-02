@@ -1,35 +1,84 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { useCheckoutStore } from "./useCheckoutStore";
 import type { ICartProduct, IProduct } from "@/types";
 
-export type CartStore = {
+export interface ICartStore {
+  cartId: number | undefined;
   items: Array<ICartProduct>;
   totalItems: number;
   totalPrice: number;
   isCartOverlayOn: boolean;
   addItem: (item: IProduct) => void;
-  //   removeItem: (itemId: number) => void;
-  //   updateQuantity: (itemId: number, quantity: number) => void;
+  openCartOverlay: () => void;
+  closeCartOverlay: () => void;
+  updateQuantity: (productId: number, quantity: number) => void;
+  proceedToCheckout: () => void;
   //   clearCart: () => void;
 };
 
-export const useCartStore = create<CartStore>()(
+export const useCartStore = create<ICartStore>()(
   devtools(
     persist(
       (set, get) => ({
+        cartId: undefined,
         items: [],
         totalItems: 0,
         totalPrice: 0,
         isCartOverlayOn: false,
-        addItem: async (product) => {
-          const items = get().items;
+        proceedToCheckout: () => {
+          set((state) => ({ ...state, isCartOverlayOn: false }));
+          const { openOverlay } = useCheckoutStore.getState();
+          openOverlay("isCheckoutOverlayOn");
+        },
+        openCartOverlay: () =>
+          set((state) => ({ ...state, isCartOverlayOn: true })),
+        closeCartOverlay: () =>
+          set((state) => ({ ...state, isCartOverlayOn: false })),
+        updateQuantity: async (productId, quantity) => {
+          const cartId = get().cartId;
 
-          if (!items.length) {
+          const response = await updateCart(cartId!, productId, quantity);
+
+          if (!response.id) return;
+
+          set((state) => {
+            let updatedItems;
+            if (quantity <= 0) {
+              updatedItems = state.items.filter(
+                (item) => item.id !== productId
+              );
+            } else {
+              updatedItems = state.items.map((item) =>
+                item.id === productId ? { ...item, quantity: quantity } : item
+              );
+            }
+
+            return {
+              ...state,
+              items: updatedItems,
+              totalItems: updatedItems.reduce(
+                (total, item) => total + item.quantity,
+                0
+              ),
+              totalPrice: updatedItems.reduce(
+                (total, item) => total + item.price * item.quantity,
+                0
+              ),
+            };
+          });
+        },
+        addItem: async (product: IProduct) => {
+          const items = get().items;
+          const cartId = get().cartId;
+
+          // If no items, create cart with selected product
+          if (!cartId) {
             const response = await createCart(product.id, 1);
-            console.log("response", response);
             if (response.id) {
               set((state) => {
                 return {
+                  cartId: response.id,
                   items: [...state.items, { ...product, quantity: 1 }],
                   totalItems: state.totalItems + 1,
                   totalPrice: state.totalPrice + product.price,
@@ -39,12 +88,23 @@ export const useCartStore = create<CartStore>()(
             return;
           }
 
-          const existingItem = items.find((i) => i.id === product.id);
+          const existingItem = items.find((item) => item.id === product.id);
 
+          // If cart has item, updating cart instead of creating cart
           if (existingItem) {
+            const response = await updateCart(
+              cartId!,
+              product.id,
+              existingItem.quantity + 1
+            );
+
+            if (!response.id) return;
+
             set((state) => {
-              const updatedItems = state.items.map((i) =>
-                i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
+              const updatedItems = state.items.map((item) =>
+                item.id === product.id
+                  ? { ...item, quantity: item.quantity + 1 }
+                  : item
               );
               return {
                 items: updatedItems,
@@ -53,8 +113,10 @@ export const useCartStore = create<CartStore>()(
               };
             });
           } else {
-            // const response = await createCart(product.id, 1)
-            // console.log("response", response)
+            const response = await updateCart(cartId!, product.id, 1);
+
+            if (!response.id) return;
+
             set((state) => {
               return {
                 items: [...state.items, { ...product, quantity: 1 }],
@@ -67,7 +129,6 @@ export const useCartStore = create<CartStore>()(
       }),
       {
         name: "cart-storage",
-        // skipHydration: true,
       }
     ),
     {
@@ -85,6 +146,29 @@ export async function createCart(productId: number, quantity: number) {
     },
     body: JSON.stringify({
       userId: 5,
+      products: [{ productId, quantity }],
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch products");
+  }
+
+  return response.json();
+}
+
+export async function updateCart(
+  cartId: number,
+  productId: number,
+  quantity: number
+) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      cartId,
       products: [{ productId, quantity }],
     }),
   });
