@@ -53,6 +53,7 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        "store-gray": "#707784",
       },
       borderRadius: {
         lg: "var(--radius)",
