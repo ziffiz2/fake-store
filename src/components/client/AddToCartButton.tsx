@@ -11,7 +11,16 @@ export default function AddToCartButton(props: { product: IProduct }) {
     (state: any) => state
   );
 
-  if (!cartStore) return <></>;
+  if (!cartStore)
+    return (
+      <Button
+        disabled
+        className="w-full hover:bg-blue-700/80 active:bg-blue-700/70"
+      >
+        Add to cart
+      </Button>
+    );
+    
   const { addItem } = cartStore;
 
   return (
@@ -22,4 +31,4 @@ export default function AddToCartButton(props: { product: IProduct }) {
       Add to cart
     </Button>
   );
-};
+}

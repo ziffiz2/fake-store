@@ -4,14 +4,14 @@ import type { IProduct } from "@/types/index";
 
 async function ProductList(): Promise<ReactNode> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/products`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/store`
   );
 
   if (!response.ok) {
     throw new Error("Failed to fetch products");
   }
 
-  const products = await response.json();
+  const { products } = await response.json();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
