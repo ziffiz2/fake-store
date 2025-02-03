@@ -1,39 +1,8 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { useCartStore } from "./useCartStore";
 
-interface ICheckoutForm {
-  name: string;
-  email: string;
-  address: string;
-  cardNumber: string;
-  cardName: string;
-  cardExpiry: string;
-  cardCvc: string;
-}
-
-interface IValidationErrors {
-  name?: string;
-  email?: string;
-  address?: string;
-  cardNumber?: string;
-  cardName?: string;
-  cardExpiry?: string;
-  cardCvc?: string;
-}
-
-export interface ICheckoutStore {
-  formData: ICheckoutForm;
-  errors: IValidationErrors;
-  isValid: boolean;
-  isCheckoutOverlayOn: boolean;
-  isConfirmOverlayOn: boolean;
-  updateField: (field: keyof ICheckoutForm, value: string) => void;
-  validateField: (field: keyof ICheckoutForm) => void;
-  clearErrors: () => void;
-  resetForm: () => void;
-  openOverlay: (field: "isCheckoutOverlayOn" | "isConfirmOverlayOn") => void;
-  closeOverlay: (field: "isCheckoutOverlayOn" | "isConfirmOverlayOn") => void;
-}
+import type { ICheckoutForm, ICheckoutStore} from "@/types"
 
 const initialFormData: ICheckoutForm = {
   name: "",
@@ -102,7 +71,9 @@ export const useCheckoutStore = create<ICheckoutStore>()(
       openOverlay: (field) => set((state) => ({ ...state, [field]: true })),
       closeOverlay: (field) => {
         set((state) => ({ ...state, [field]: false }));
-        get().resetForm()
+        if (field === "isCheckoutOverlayOn") {
+          get().resetForm();
+        }
       },
       updateField: (field, value) =>
         set((state) => ({
@@ -132,14 +103,11 @@ export const useCheckoutStore = create<ICheckoutStore>()(
             isValid,
           };
         }),
-
       clearErrors: () => {
-        set((state) => {
-          return {
-            ...state,
-            errors: {},
-          };
-        });
+        set((state) => ({
+          ...state,
+          errors: {},
+        }));
       },
       resetForm: () => {
         set((state) => ({
@@ -147,6 +115,18 @@ export const useCheckoutStore = create<ICheckoutStore>()(
           errors: {},
           formData: initialFormData,
           isValid: false,
+        }));
+      },
+      confirmOrder: () => {
+        const actions = get();
+        const cartActions = useCartStore.getState();
+
+        actions.closeOverlay("isCheckoutOverlayOn");
+        actions.openOverlay("isConfirmOverlayOn");
+        cartActions.clearCart();
+
+        set((state) => ({
+          ...state,
         }));
       },
     }),

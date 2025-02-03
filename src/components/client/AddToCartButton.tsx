@@ -2,8 +2,8 @@
 
 import useStore from "@/store/useStore";
 import { Button } from "@/components/ui/button";
-import { useCartStore, ICartStore } from "@/store/useCartStore";
-import type { IProduct } from "@/types/index";
+import { useCartStore } from "@/store/useCartStore";
+import type { IProduct, ICartStore } from "@/types";
 
 export default function AddToCartButton(props: { product: IProduct }) {
   const cartStore = useStore<ICartStore, ICartStore>(
@@ -13,27 +13,6 @@ export default function AddToCartButton(props: { product: IProduct }) {
 
   if (!cartStore) return <></>;
   const { addItem } = cartStore;
-  
-  // const createCart = async () => {
-  //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carts`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       userId: 5,
-  //       date: "2020-02-03",
-  //       products: [{ productId: props.product.id, quantity: 1 }],
-  //     }),
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error("Failed to create cart");
-  //   }
-
-  //   const data = await response.json();
-  //   console.log("data", data)
-  // };
 
   return (
     <Button

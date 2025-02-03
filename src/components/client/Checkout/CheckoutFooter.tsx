@@ -1,9 +1,10 @@
 "use client";
 
-import { ICartStore, useCartStore } from "@/store/useCartStore";
-import { ICheckoutStore, useCheckoutStore } from "@/store/useCheckoutStore";
+import { useCartStore } from "@/store/useCartStore";
+import { useCheckoutStore } from "@/store/useCheckoutStore";
 import { Button } from "@/components/ui/button";
 import useStore from "@/store/useStore";
+import type { ICartStore, ICheckoutStore } from "@/types";
 
 export default function CheckoutFooter() {
   const cartStore = useStore<ICartStore, ICartStore>(
@@ -20,7 +21,7 @@ export default function CheckoutFooter() {
 
   const { totalPrice } = cartStore;
 
-  const { isValid } = checkoutStore;
+  const { isValid, confirmOrder } = checkoutStore;
 
   return (
     <div className="border-t py-2 space-y-2">
@@ -29,6 +30,7 @@ export default function CheckoutFooter() {
       </div>
       <Button
         disabled={!isValid}
+        onClick={confirmOrder}
         className="w-full bg-green-600 hover:bg-green-600/80 active:bg-green-600/70"
       >
         Confirm order

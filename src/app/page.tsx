@@ -1,6 +1,7 @@
 import { Header } from "@/components/server/Header";
-import CheckoutOverlay from "@/components/client/Checkout/CheckoutOverlay";
 import CartOverlay from "@/components/client/Cart/CartOverlay";
+import CheckoutOverlay from "@/components/client/Checkout/CheckoutOverlay";
+import OrderConfirmOverlay from "@/components/client/Checkout/OrderConfirmOverlay";
 
 import ProductList from "@/components/server/ProductList";
 
@@ -13,6 +14,7 @@ export default function Home() {
       </div>
       <CheckoutOverlay />
       <CartOverlay />
+      <OrderConfirmOverlay />
     </>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import type { ICartProduct } from "@/types";
+import type { ICartProduct, ICartStore } from "@/types";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useStore from "@/store/useStore";
-import { ICartStore, useCartStore } from "@/store/useCartStore";
+import { useCartStore } from "@/store/useCartStore";
 
 export default function CartItem(props: ICartProduct) {
   const cartStore = useStore<ICartStore, ICartStore>(

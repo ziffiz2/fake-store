@@ -1,4 +1,3 @@
-// types/product.ts
 export interface IRating {
   rate: number;
   count: number;

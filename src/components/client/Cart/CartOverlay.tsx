@@ -1,7 +1,7 @@
 "use client";
 
 import CartItem from "@/components/client/Cart/CartItem";
-import { ICartStore, useCartStore } from "@/store/useCartStore";
+import { useCartStore } from "@/store/useCartStore";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import useStore from "@/store/useStore";
 import { Button } from "@/components/ui/button";
+import type { ICartStore } from "@/types";
 
 export default function CartOverlay() {
   const cartStore = useStore<ICartStore, ICartStore>(
@@ -39,7 +40,9 @@ export default function CartOverlay() {
               Cart
             </DialogTitle>
           </DialogHeader>
-          {totalItems <= 0 && <div className="text-center">The cart is empty</div>}
+          {totalItems <= 0 && (
+            <div className="text-center">The cart is empty</div>
+          )}
           {totalItems > 0 && (
             <div className="flex flex-col max-h-[60vh]">
               <div className="overflow-y-auto flex-1 space-y-4">

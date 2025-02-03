@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import logoIcon from '@/assets/icons/logo.svg'; 
-import Cart from '@/components/client/Cart';
+import Cart from '@/components/client/CartIconButton';
 
 export function Header() {
   return (

@@ -1,21 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { useCheckoutStore } from "./useCheckoutStore";
-import type { ICartProduct, IProduct } from "@/types";
-
-export interface ICartStore {
-  cartId: number | undefined;
-  items: Array<ICartProduct>;
-  totalItems: number;
-  totalPrice: number;
-  isCartOverlayOn: boolean;
-  addItem: (item: IProduct) => void;
-  openCartOverlay: () => void;
-  closeCartOverlay: () => void;
-  updateQuantity: (productId: number, quantity: number) => void;
-  proceedToCheckout: () => void;
-  //   clearCart: () => void;
-};
+import type { IProduct, ICartStore } from "@/types";
 
 export const useCartStore = create<ICartStore>()(
   devtools(
@@ -31,17 +17,24 @@ export const useCartStore = create<ICartStore>()(
           const { openOverlay } = useCheckoutStore.getState();
           openOverlay("isCheckoutOverlayOn");
         },
+        clearCart: () => {
+          set((state) => ({
+            ...state,
+            cartId: undefined,
+            items: [],
+            totalItems: 0,
+            totalPrice: 0,
+          }));
+        },
         openCartOverlay: () =>
           set((state) => ({ ...state, isCartOverlayOn: true })),
         closeCartOverlay: () =>
           set((state) => ({ ...state, isCartOverlayOn: false })),
         updateQuantity: async (productId, quantity) => {
           const cartId = get().cartId;
-
           const response = await updateCart(cartId!, productId, quantity);
 
           if (!response.id) return;
-
           set((state) => {
             let updatedItems;
             if (quantity <= 0) {

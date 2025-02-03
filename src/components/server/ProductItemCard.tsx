@@ -18,7 +18,7 @@ async function ProductItemCard(props: IProduct) {
           />
         </div>
       </div>
-      <div className="text-sm text-store-gray mb-2">{props.title}</div>
+      <div className="text-sm text-store-gray mb-2 sm:h-12">{props.title}</div>
       <div className="flex justify-between items-center mb-2">
         <div className="text-black text-lg font-semibold">${props.price}</div>
         <div>

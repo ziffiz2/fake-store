@@ -1,8 +1,9 @@
 "use client";
-import { ICheckoutStore, useCheckoutStore } from "@/store/useCheckoutStore";
+import { useCheckoutStore } from "@/store/useCheckoutStore";
 import useStore from "@/store/useStore";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { ICheckoutStore } from "@/types";
 
 export default function CheckoutOverlay() {
   const checkoutStore = useStore<ICheckoutStore, ICheckoutStore>(
