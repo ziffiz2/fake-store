@@ -29,7 +29,7 @@ export default function OrderConfirmOverlay() {
         onOpenChange={() => closeOverlay(CheckoutOverlayType.CONFIRM)}
       >
         <DialogContent
-          className="max-w-[90%] sm:max-w-[425px] px-2 rounded-lg"
+          className="max-w-[90%] sm:max-w-[425px] px-2 rounded-lg top-40"
           aria-describedby={undefined}
         >
           <DialogHeader className="">

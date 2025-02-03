@@ -47,8 +47,8 @@ export default function CartOverlay() {
           {totalItems > 0 && (
             <div className="flex flex-col max-h-[60vh]">
               <div className="overflow-y-auto flex-1 space-y-4">
-                {items.map((product) => {
-                  return <CartItem key={product.id} {...product} />;
+                {items.map((product, index) => {
+                  return <CartItem key={`${product.id}-${index}`} {...product} />;
                 })}
               </div>
             </div>
