@@ -30,6 +30,7 @@ export interface ICheckoutStore {
   updateField: (field: keyof ICheckoutForm, value: string) => void;
   validateField: (field: keyof ICheckoutForm) => void;
   clearErrors: () => void;
+  resetForm: () => void;
   openOverlay: (field: "isCheckoutOverlayOn" | "isConfirmOverlayOn") => void;
   closeOverlay: (field: "isCheckoutOverlayOn" | "isConfirmOverlayOn") => void;
 }
@@ -92,53 +93,66 @@ const validators = {
 };
 
 export const useCheckoutStore = create<ICheckoutStore>()(
-  devtools((set, get) => ({
-    formData: initialFormData,
-    errors: {},
-    isValid: false,
-    isCheckoutOverlayOn: false,
-    openOverlay: (field) => set((state) => ({ ...state, [field]: true })),
-    closeOverlay: (field) => set((state) => ({ ...state, [field]: false })),
-    updateField: (field, value) =>
-      set((state) => ({
-        ...state,
-        formData: {
-          ...state.formData,
-          [field]: value,
-        },
-      })),
-
-    validateField: (field) =>
-      set((state) => {
-        const error = validators[field](state.formData[field]);
-        const newErrors = {
-          ...state.errors,
-          [field]: error,
-        };
-
-        // Make sure all fields are filled and error free
-        const isValid =
-          Object.values(newErrors).every((error) => !error) &&
-          Object.values(state.formData).every((value) => value.trim() !== "");
-
-        return {
+  devtools(
+    (set, get) => ({
+      formData: initialFormData,
+      errors: {},
+      isValid: false,
+      isCheckoutOverlayOn: false,
+      openOverlay: (field) => set((state) => ({ ...state, [field]: true })),
+      closeOverlay: (field) => {
+        set((state) => ({ ...state, [field]: false }));
+        get().resetForm()
+      },
+      updateField: (field, value) =>
+        set((state) => ({
           ...state,
-          errors: newErrors,
-          isValid,
-        };
-      }),
+          formData: {
+            ...state.formData,
+            [field]: value,
+          },
+        })),
 
-    clearErrors: () => {
-      set((state) => {
-        return {
+      validateField: (field) =>
+        set((state) => {
+          const error = validators[field](state.formData[field]);
+          const newErrors = {
+            ...state.errors,
+            [field]: error,
+          };
+
+          // Make sure all fields are filled and error free
+          const isValid =
+            Object.values(newErrors).every((error) => !error) &&
+            Object.values(state.formData).every((value) => value.trim() !== "");
+
+          return {
+            ...state,
+            errors: newErrors,
+            isValid,
+          };
+        }),
+
+      clearErrors: () => {
+        set((state) => {
+          return {
+            ...state,
+            errors: {},
+          };
+        });
+      },
+      resetForm: () => {
+        set((state) => ({
           ...state,
           errors: {},
-        };
-      });
-    },
-  }),
-  {
-    name: "Checkout Store",
-    enabled: process.env.NODE_ENV === "development",
-  })
+          formData: initialFormData,
+          isValid: false,
+        }));
+      },
+    }),
+    {
+      name: "Checkout Store",
+      enabled: process.env.NODE_ENV === "development",
+    }
+  )
 );
