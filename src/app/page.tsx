@@ -4,6 +4,7 @@ import CheckoutOverlay from "@/components/client/Checkout/CheckoutOverlay";
 import OrderConfirmOverlay from "@/components/client/Checkout/OrderConfirmOverlay";
 
 import ProductList from "@/components/server/ProductList";
+import { Footer } from "@/components/server/Footer";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <div className="w-full bg-white">
         <Header />
         <ProductList />
+        <Footer />
       </div>
       <CheckoutOverlay />
       <CartOverlay />

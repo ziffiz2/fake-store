@@ -1,3 +1,8 @@
+export enum CheckoutOverlayType {
+  CHECKOUT = "isCheckoutOverlayOn",
+  CONFIRM = "isConfirmOverlayOn",
+}
+
 export interface ICheckoutForm {
   name: string;
   email: string;
@@ -24,11 +29,12 @@ export interface ICheckoutStore {
   isValid: boolean;
   isCheckoutOverlayOn: boolean;
   isConfirmOverlayOn: boolean;
+  isLoading: boolean;
   updateField: (field: keyof ICheckoutForm, value: string) => void;
   validateField: (field: keyof ICheckoutForm) => void;
   clearErrors: () => void;
   resetForm: () => void;
-  openOverlay: (field: "isCheckoutOverlayOn" | "isConfirmOverlayOn") => void;
-  closeOverlay: (field: "isCheckoutOverlayOn" | "isConfirmOverlayOn") => void;
+  openOverlay: (field: CheckoutOverlayType) => void;
+  closeOverlay: (field: CheckoutOverlayType) => void;
   confirmOrder: () => void;
 }

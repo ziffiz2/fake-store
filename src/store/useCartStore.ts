@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { useCheckoutStore } from "./useCheckoutStore";
-import type { IProduct, ICartStore } from "@/types";
+import { updateCart, createCart } from "@/services";
+import { type IProduct, type ICartStore, CheckoutOverlayType } from "@/types";
 
 export const useCartStore = create<ICartStore>()(
   devtools(
@@ -12,10 +13,11 @@ export const useCartStore = create<ICartStore>()(
         totalItems: 0,
         totalPrice: 0,
         isCartOverlayOn: false,
+        isLoading: false,
         proceedToCheckout: () => {
           set((state) => ({ ...state, isCartOverlayOn: false }));
           const { openOverlay } = useCheckoutStore.getState();
-          openOverlay("isCheckoutOverlayOn");
+          openOverlay(CheckoutOverlayType.CHECKOUT);
         },
         clearCart: () => {
           set((state) => ({
@@ -32,9 +34,16 @@ export const useCartStore = create<ICartStore>()(
           set((state) => ({ ...state, isCartOverlayOn: false })),
         updateQuantity: async (productId, quantity) => {
           const cartId = get().cartId;
+
+          set({ isLoading: true });
+
           const response = await updateCart(cartId!, productId, quantity);
 
-          if (!response.id) return;
+          if (!response.id) {
+            set({ isLoading: false });
+            return;
+          }
+
           set((state) => {
             let updatedItems;
             if (quantity <= 0) {
@@ -58,6 +67,7 @@ export const useCartStore = create<ICartStore>()(
                 (total, item) => total + item.price * item.quantity,
                 0
               ),
+              isLoading: false,
             };
           });
         },
@@ -130,45 +140,3 @@ export const useCartStore = create<ICartStore>()(
     }
   )
 );
-
-export async function createCart(productId: number, quantity: number) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      userId: 5,
-      products: [{ productId, quantity }],
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch products");
-  }
-
-  return response.json();
-}
-
-export async function updateCart(
-  cartId: number,
-  productId: number,
-  quantity: number
-) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      cartId,
-      products: [{ productId, quantity }],
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch products");
-  }
-
-  return response.json();
-}

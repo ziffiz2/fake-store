@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { IProduct } from "@/types/index";
+import type { IProduct } from "@/types";
 import StarRating from "./StarRating";
 import AddToCartButton from "@/components/client/AddToCartButton";
 
@@ -18,7 +18,7 @@ async function ProductItemCard(props: IProduct) {
           />
         </div>
       </div>
-      <div className="text-sm text-store-gray mb-2 sm:h-12">{props.title}</div>
+      <div className="text-sm text-store-gray mb-2 sm:h-16 md:h-16 lg:h-12">{props.title}</div>
       <div className="flex justify-between items-center mb-2">
         <div className="text-black text-lg font-semibold">${props.price}</div>
         <div>

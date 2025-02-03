@@ -4,13 +4,13 @@ import Image from "next/image";
 import bagIcon from "@/assets/icons/bag.svg";
 import { useCartStore } from "@/store/useCartStore";
 import { Button } from "@/components/ui/button";
-import useStore from "@/store/useStore";
+import useStore from "@/hooks/useStore";
 import type { ICartStore } from "@/types"
 
 export default function Cart() {
   const cartStore = useStore<ICartStore, ICartStore>(
     useCartStore,
-    (state: any) => state
+    (state) => state
   );
 
   if (!cartStore) return <></>;

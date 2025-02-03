@@ -9,6 +9,7 @@ export interface ICartStore {
   totalItems: number;
   totalPrice: number;
   isCartOverlayOn: boolean;
+  isLoading: boolean;
   addItem: (item: IProduct) => void;
   openCartOverlay: () => void;
   closeCartOverlay: () => void;

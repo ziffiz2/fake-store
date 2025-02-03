@@ -5,13 +5,13 @@ import type { ICartProduct, ICartStore } from "@/types";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useStore from "@/store/useStore";
+import useStore from "@/hooks/useStore";
 import { useCartStore } from "@/store/useCartStore";
 
 export default function CartItem(props: ICartProduct) {
   const cartStore = useStore<ICartStore, ICartStore>(
     useCartStore,
-    (state: any) => state
+    (state) => state
   );
 
   if (!cartStore) return <></>;

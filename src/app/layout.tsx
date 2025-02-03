@@ -12,6 +12,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Fake Store",
   description: "Fake store like real one",
+  icons: {
+    icon: '/logo.svg',
+  },
 };
 
 export default function RootLayout({

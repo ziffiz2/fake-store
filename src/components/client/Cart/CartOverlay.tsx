@@ -9,14 +9,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import useStore from "@/store/useStore";
+import useStore from "@/hooks/useStore";
 import { Button } from "@/components/ui/button";
 import type { ICartStore } from "@/types";
 
 export default function CartOverlay() {
   const cartStore = useStore<ICartStore, ICartStore>(
     useCartStore,
-    (state: any) => state
+    (state) => state
   );
 
   if (!cartStore) return <></>;
@@ -24,6 +24,7 @@ export default function CartOverlay() {
     totalItems,
     isCartOverlayOn,
     items,
+    isLoading: isCartLoading,
     closeCartOverlay,
     proceedToCheckout,
   } = cartStore;
@@ -55,7 +56,7 @@ export default function CartOverlay() {
 
           <DialogFooter>
             <Button
-              disabled={totalItems <= 0}
+              disabled={totalItems <= 0 || isCartLoading}
               className="w-full bg-green-600 hover:bg-green-600/80 active:bg-green-600/70"
               onClick={proceedToCheckout}
             >

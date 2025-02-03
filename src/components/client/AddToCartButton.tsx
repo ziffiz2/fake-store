@@ -1,6 +1,6 @@
 "use client";
 
-import useStore from "@/store/useStore";
+import useStore from "@/hooks/useStore";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/useCartStore";
 import type { IProduct, ICartStore } from "@/types";
@@ -8,7 +8,7 @@ import type { IProduct, ICartStore } from "@/types";
 export default function AddToCartButton(props: { product: IProduct }) {
   const cartStore = useStore<ICartStore, ICartStore>(
     useCartStore,
-    (state: any) => state
+    (state) => state
   );
 
   if (!cartStore)
@@ -20,7 +20,7 @@ export default function AddToCartButton(props: { product: IProduct }) {
         Add to cart
       </Button>
     );
-    
+
   const { addItem } = cartStore;
 
   return (

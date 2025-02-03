@@ -9,33 +9,33 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import useStore from "@/store/useStore";
+import useStore from "@/hooks/useStore";
 import CheckoutForm from "@/components/client/Checkout/CheckoutForm";
 import CheckoutFooter from "./CheckoutFooter";
-import type { ICartStore, ICheckoutStore } from "@/types";
+import { CheckoutOverlayType, type ICartStore, type ICheckoutStore } from "@/types";
 
 export default function CheckoutOverlay() {
   const cartStore = useStore<ICartStore, ICartStore>(
     useCartStore,
-    (state: any) => state
+    (state) => state
   );
 
   const checkoutStore = useStore<ICheckoutStore, ICheckoutStore>(
     useCheckoutStore,
-    (state: any) => state
+    (state) => state
   );
 
   if (!cartStore || !checkoutStore) return <></>;
 
-  const { items, totalPrice } = cartStore;
+  const { items } = cartStore;
 
-  const { isCheckoutOverlayOn, isValid, closeOverlay } = checkoutStore;
+  const { isCheckoutOverlayOn, closeOverlay } = checkoutStore;
 
   return (
     <div>
       <Dialog
         open={isCheckoutOverlayOn}
-        onOpenChange={() => closeOverlay("isCheckoutOverlayOn")}
+        onOpenChange={() => closeOverlay(CheckoutOverlayType.CHECKOUT)}
       >
         <DialogContent
           className="max-w-[90%] sm:max-w-[425px] px-2 rounded-lg"

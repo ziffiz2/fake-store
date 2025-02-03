@@ -8,14 +8,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import useStore from "@/store/useStore";
+import useStore from "@/hooks/useStore";
 import { Button } from "@/components/ui/button";
-import type { ICheckoutStore } from "@/types";
+import { CheckoutOverlayType, type ICheckoutStore } from "@/types";
 
 export default function OrderConfirmOverlay() {
   const checkoutStore = useStore<ICheckoutStore, ICheckoutStore>(
     useCheckoutStore,
-    (state: any) => state
+    (state) => state
   );
 
   if (!checkoutStore) return <></>;
@@ -26,7 +26,7 @@ export default function OrderConfirmOverlay() {
     <div>
       <Dialog
         open={isConfirmOverlayOn}
-        onOpenChange={() => closeOverlay("isConfirmOverlayOn")}
+        onOpenChange={() => closeOverlay(CheckoutOverlayType.CONFIRM)}
       >
         <DialogContent
           className="max-w-[90%] sm:max-w-[425px] px-2 rounded-lg"
@@ -43,9 +43,9 @@ export default function OrderConfirmOverlay() {
           <DialogFooter className="">
             <Button
               className="w-full bg-black"
-              onClick={() => closeOverlay("isConfirmOverlayOn")}
+              onClick={() => closeOverlay(CheckoutOverlayType.CONFIRM)}
             >
-              Checkout
+              Close
             </Button>
           </DialogFooter>
         </DialogContent>
