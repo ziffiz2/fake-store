@@ -1,5 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+Before running the app, please add
+```
+NEXT_PUBLIC_API_URL=http://localhost:3000
+PORT=3000
+
+```
+to both .env.local and .env.production files. Otherwise, the app will fail to run.
+
+
 ## Getting Started
 
 First, run the development server:
