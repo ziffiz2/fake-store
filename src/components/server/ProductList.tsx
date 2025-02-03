@@ -33,8 +33,8 @@ async function ProductList() {
         </div>
       </div>
     );
-  } catch (error) {
-    return <div>Error loading products. Please try again later.</div>;
+  } catch {
+    return <div>loading products. Please try again later.</div>;
   }
 }
 
