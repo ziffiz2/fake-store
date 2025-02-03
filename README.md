@@ -1,17 +1,24 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Before running the app, please add
+## Getting Started
+
+
+Before running the app, please add the following settings to both .env.local and .env.production files. Otherwise, the app will fail to run.
 ```
 NEXT_PUBLIC_API_URL=http://localhost:3000
 PORT=3000
 
 ```
-to both .env.local and .env.production files. Otherwise, the app will fail to run.
+To run the docker production build:
+
+```
+docker build -t my-app .
+docker run -p 3000:3000 my-app
+```
 
 
-## Getting Started
 
-First, run the development server:
+To run the development server:
 
 ```bash
 npm run dev
