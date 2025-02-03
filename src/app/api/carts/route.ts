@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     const data = await response.json();
     return Response.json(data, { status: 201 });
   } catch (error) {
-    return Response.json({ error: "Failed to create cart" }, { status: 500 });
+    return Response.json({ error }, { status: 500 });
   }
 }
 
@@ -53,6 +53,6 @@ export async function PUT(request: Request) {
     const data = await response.json();
     return Response.json(data, { status: 201 });
   } catch (error) {
-    return Response.json({ error: "Failed to create cart" }, { status: 500 });
+    return Response.json({ error }, { status: 500 });
   }
 }

@@ -4,9 +4,6 @@ export async function GET() {
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
-    return Response.json(
-      { error: "Failed to fetch products" },
-      { status: 500 }
-    );
+    return Response.json({ error }, { status: 500 });
   }
 }

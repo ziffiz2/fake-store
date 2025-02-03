@@ -33,9 +33,6 @@ export async function GET() {
 
     return Response.json(storeData);
   } catch (error) {
-    return Response.json(
-      { error: "Failed to fetch store data" },
-      { status: 500 }
-    );
+    return Response.json({ error }, { status: 500 });
   }
 }

@@ -5,13 +5,14 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'fakestoreapi.com',
-        pathname: '/img/**',
+        protocol: "https",
+        hostname: "fakestoreapi.com",
+        pathname: "/img/**",
       },
     ],
   },
-  suppressHydrationWarning: true
+  reactStrictMode: false,
+  output: "standalone",
 };
 
 export default nextConfig;

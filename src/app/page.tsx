@@ -6,6 +6,8 @@ import OrderConfirmOverlay from "@/components/client/Checkout/OrderConfirmOverla
 import ProductList from "@/components/server/ProductList";
 import { Footer } from "@/components/server/Footer";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>
